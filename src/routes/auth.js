@@ -30,8 +30,8 @@ router.post('/join', async (req, res) => {
 
     // Look up team by join code
     const result = await db.query(
-      'SELECT id, name, join_code, coins, status FROM teams WHERE join_code = $1',
-      [joinCode.toUpperCase()]
+      'SELECT id, name, public_id, join_code, coins, status FROM teams WHERE join_code = $1',
+      [joinCode]
     );
 
     if (result.rows.length === 0) {
