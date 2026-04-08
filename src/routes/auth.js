@@ -44,11 +44,14 @@ router.post('/join', async (req, res) => {
 
     const team = result.rows[0];
 
-    // Verify team ID matches (case-insensitive)
-    if (!team.public_id || team.public_id.toLowerCase() !== teamName.toLowerCase()) {
+    // Verify team ID matches (accepts BOTH public_id and actual name for cached phone backwards-compatibility)
+    const idMatches = team.public_id && team.public_id.toLowerCase() === teamName.toLowerCase();
+    const nameMatches = team.name && team.name.toLowerCase() === teamName.toLowerCase();
+
+    if (!idMatches && !nameMatches) {
       return res.status(401).json({
         error: 'NAME_MISMATCH',
-        message: 'Team ID does not match the Password.',
+        message: 'Team ID/Name does not match the Password.',
         retryable: true,
       });
     }
