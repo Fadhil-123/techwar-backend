@@ -10,6 +10,7 @@ const { initSocketHandlers } = require('./socket/socketHandlers');
 const { router: r2Router, initR2SocketHandlers } = require('./routes/r2');
 
 const app = express();
+app.set('trust proxy', 1); // Trust first proxy (Railway)
 const server = http.createServer(app);
 
 // ─── Socket.io Setup ───────────────────────────────────────
