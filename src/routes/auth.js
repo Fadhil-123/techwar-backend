@@ -44,8 +44,8 @@ router.post('/join', async (req, res) => {
 
     const team = result.rows[0];
 
-    // Verify team name matches (case-insensitive)
-    if (team.name.toLowerCase() !== teamName.toLowerCase()) {
+    // Verify team ID matches (case-insensitive)
+    if (!team.public_id || team.public_id.toLowerCase() !== teamName.toLowerCase()) {
       return res.status(401).json({
         error: 'NAME_MISMATCH',
         message: 'Team ID does not match the Password.',
