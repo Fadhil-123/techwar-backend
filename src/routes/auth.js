@@ -28,9 +28,9 @@ router.post('/join', async (req, res) => {
 
     const { teamName, joinCode } = parsed.data;
 
-    // Look up team by join code
+    // Look up team by join code (case-insensitive so old frontend uppercase bug won't break logins)
     const result = await db.query(
-      'SELECT id, name, public_id, join_code, coins, status FROM teams WHERE join_code = $1',
+      'SELECT id, name, public_id, join_code, coins, status FROM teams WHERE join_code ILIKE $1',
       [joinCode]
     );
 
