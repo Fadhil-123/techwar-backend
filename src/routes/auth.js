@@ -21,7 +21,7 @@ router.post('/join', async (req, res) => {
     if (!parsed.success) {
       return res.status(400).json({
         error: 'VALIDATION_ERROR',
-        message: 'Invalid team name or join code format',
+        message: 'Invalid Team ID or Password format',
         retryable: true,
       });
     }
@@ -37,7 +37,7 @@ router.post('/join', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({
         error: 'INVALID_CODE',
-        message: 'Join code not found. Check your code and try again.',
+        message: 'Password not found. Check your credential card and try again.',
         retryable: true,
       });
     }
@@ -48,7 +48,7 @@ router.post('/join', async (req, res) => {
     if (team.name.toLowerCase() !== teamName.toLowerCase()) {
       return res.status(401).json({
         error: 'NAME_MISMATCH',
-        message: 'Team name does not match join code.',
+        message: 'Team ID does not match the Password.',
         retryable: true,
       });
     }
