@@ -1,6 +1,18 @@
 require('dotenv').config();
 const dns = require('dns');
-dns.setDefaultResultOrder('ipv4first'); // Force Node.js to use IPv4 to fix Railway ENETUNREACH
+// pg ignores setDefaultResultOrder, so we must hard-patch dns.lookup
+const originalLookup = dns.lookup;
+dns.lookup = function(hostname, options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = { family: 4 };
+  } else if (typeof options === 'object') {
+    options = { ...options, family: 4 };
+  } else {
+    options = { family: 4 };
+  }
+  return originalLookup(hostname, options, callback);
+};
 
 const express = require('express');
 const http = require('http');
