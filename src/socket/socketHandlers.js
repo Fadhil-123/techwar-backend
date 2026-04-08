@@ -38,6 +38,47 @@ function initSocketHandlers(io) {
           coins: team.rows[0]?.coins || 0,
           status: team.rows[0]?.status || 'active',
         });
+
+        // --- AUTO-RECOVER R2 STATE FOR CACHED PHONES ---
+        if (state.rows[0]?.current_round === 2 && state.rows[0]?.round_status === 'active') {
+          const { getR2State } = require('../routes/r2');
+          const r2s = getR2State();
+          if (r2s && r2s.activeCategory && r2s.phase !== 'idle') {
+             const difficulty = r2s.selections[decoded.teamId];
+             if (r2s.phase === 'selecting') {
+               socket.emit('r2:select-difficulty', {
+                 category: r2s.activeCategory,
+                 categoryLabel: r2s.activeCategory, // simplify
+                 timeLimit: Math.max(0, (new Date(r2s.selectionDeadline).getTime() - Date.now()) / 1000),
+                 deadline: r2s.selectionDeadline,
+               });
+               if (difficulty) {
+                 socket.emit('r2:difficulty-confirmed', { difficulty, reward: difficulty === 'medium' ? 200 : difficulty === 'hard' ? 300 : 100 });
+               }
+             } else if (r2s.phase === 'answering') {
+               const questionId = r2s.assignedQuestions[decoded.teamId];
+               if (questionId) {
+                 try {
+                   const qResult = await db.query('SELECT difficulty, question_text, options FROM questions WHERE id = $1', [questionId]);
+                   if (qResult.rows.length > 0) {
+                     const q = qResult.rows[0];
+                     socket.emit('r2:question', {
+                       questionId,
+                       text: q.question_text,
+                       options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options,
+                       difficulty: q.difficulty,
+                       reward: q.difficulty === 'medium' ? 200 : q.difficulty === 'hard' ? 300 : 100,
+                       category: r2s.activeCategory,
+                       categoryLabel: r2s.activeCategory,
+                       timeLimit: Math.max(0, (new Date(r2s.answerDeadline).getTime() - Date.now()) / 1000),
+                       deadline: r2s.answerDeadline,
+                     });
+                   }
+                 } catch(e) {}
+               }
+             }
+          }
+        }
       } catch (err) {
         console.error('[SOCKET] Auth error:', err.message);
         socket.emit('auth:error', { message: 'Authentication failed' });

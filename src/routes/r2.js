@@ -261,6 +261,62 @@ function initR2SocketHandlers(io) {
 
       console.log(`[R2] Team "${socket.teamName}" selected ${difficulty}`);
     });
+
+    // ─── Recover state if phone reconnects ─────────────
+    socket.on('r2:recover', async () => {
+      if (!socket.teamId) return;
+      
+      const category = r2State.activeCategory;
+      if (!category || r2State.phase === 'idle') return;
+
+      const difficulty = r2State.selections[socket.teamId];
+
+      if (r2State.phase === 'selecting') {
+        socket.emit('r2:select-difficulty', {
+          category,
+          categoryLabel: getCategoryLabel(category),
+          timeLimit: Math.max(0, (new Date(r2State.selectionDeadline).getTime() - Date.now()) / 1000),
+          deadline: r2State.selectionDeadline,
+        });
+
+        if (difficulty) {
+          socket.emit('r2:difficulty-confirmed', {
+            difficulty,
+            reward: difficulty === 'easy' ? 100 : difficulty === 'medium' ? 200 : 300,
+          });
+        }
+      } 
+      else if (r2State.phase === 'answering') {
+        const questionId = r2State.assignedQuestions[socket.teamId];
+        if (questionId) {
+          try {
+            const qResult = await db.query(
+              `SELECT difficulty, question_text, options FROM questions WHERE id = $1`,
+              [questionId]
+            );
+            if (qResult.rows.length > 0) {
+              const q = qResult.rows[0];
+              socket.emit('r2:question', {
+                questionId,
+                text: q.question_text,
+                options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options,
+                difficulty: q.difficulty,
+                reward: q.difficulty === 'easy' ? 100 : q.difficulty === 'medium' ? 200 : 300,
+                category,
+                categoryLabel: getCategoryLabel(category),
+                timeLimit: Math.max(0, (new Date(r2State.answerDeadline).getTime() - Date.now()) / 1000),
+                deadline: r2State.answerDeadline,
+              });
+            }
+          } catch (err) {
+            console.error('[R2] Recover error:', err.message);
+          }
+        }
+      }
+      else if (r2State.phase === 'results') {
+        socket.emit('r2:category-end', { category, categoryLabel: getCategoryLabel(category) });
+      }
+    });
   });
 }
 
