@@ -19,7 +19,7 @@ function initSocketHandlers(io) {
           return;
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_key_2026');
         socket.teamId = decoded.teamId;
         socket.teamName = decoded.teamName;
 
@@ -217,7 +217,7 @@ function initSocketHandlers(io) {
     // ─── Admin join ──────────────────────────────────────
     socket.on('admin:auth', (data) => {
       try {
-        const decoded = jwt.verify(data.token, process.env.ADMIN_JWT_SECRET);
+        const decoded = jwt.verify(data.token, process.env.ADMIN_JWT_SECRET || 'admin_fallback_secret_key_2026');
         if (decoded.isAdmin) {
           socket.join('admin');
           socket.isAdmin = true;

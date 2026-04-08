@@ -12,7 +12,7 @@ router.post('/login', (req, res) => {
   if (password !== process.env.ADMIN_PASSWORD) {
     return res.status(401).json({ error: 'INVALID_PASSWORD', message: 'Wrong admin password' });
   }
-  const token = jwt.sign({ isAdmin: true }, process.env.ADMIN_JWT_SECRET, { expiresIn: '24h' });
+  const token = jwt.sign({ isAdmin: true }, process.env.ADMIN_JWT_SECRET || 'admin_fallback_secret_key_2026', { expiresIn: '24h' });
   return res.json({ success: true, token });
 });
 

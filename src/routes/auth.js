@@ -56,7 +56,7 @@ router.post('/join', async (req, res) => {
     // Generate JWT
     const token = jwt.sign(
       { teamId: team.id, teamName: team.name },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || 'fallback_secret_key_2026',
       { expiresIn: '12h' }
     );
 
@@ -74,7 +74,7 @@ router.post('/join', async (req, res) => {
     console.error('[AUTH] Join error:', err.message);
     return res.status(500).json({
       error: 'SERVER_ERROR',
-      message: 'Internal server error',
+      message: err.message || 'Internal server error',
       retryable: true,
     });
   }
