@@ -7,7 +7,7 @@ const router = express.Router();
 
 const joinSchema = z.object({
   teamName: z.string().min(1).max(50),
-  joinCode: z.string().length(6),
+  joinCode: z.string().min(1).max(20),
 });
 
 /**
