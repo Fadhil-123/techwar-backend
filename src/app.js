@@ -15,7 +15,7 @@ const server = http.createServer(app);
 // ─── Socket.io Setup ───────────────────────────────────────
 const io = new Server(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    origin: true, // Reflects the requesting origin
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -29,7 +29,7 @@ app.set('io', io);
 // ─── Middleware ─────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: true, // Reflects the requesting origin
   credentials: true,
 }));
 app.use(express.json({ limit: '1mb' }));
@@ -121,7 +121,7 @@ server.listen(PORT, () => {
   console.log(`\n⚔️  TECH WAR Backend running on port ${PORT}`);
   console.log(`   Health: http://localhost:${PORT}/health`);
   console.log(`   Socket.io: ws://localhost:${PORT}`);
-  console.log(`   CORS Origin: ${process.env.CORS_ORIGIN || 'http://localhost:5173'}\n`);
+  console.log(`   CORS Origin: Dynamic (origin: true)\n`);
 });
 
 module.exports = { app, server, io };
