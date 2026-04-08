@@ -177,18 +177,18 @@ ON CONFLICT DO NOTHING;
 
 -- SEED: Sample Questions (Round 2 - Multi-Set Strategy)
 INSERT INTO questions (round_id, theme, difficulty, question_text, options, correct_answer, coins_reward) VALUES
-  (2, 'programming', 'easy', 'What does CSS stand for?', '["Computer Style Sheets","Creative Style Sheets","Cascading Style Sheets","Colorful Style Sheets"]', 'Cascading Style Sheets', 100),
-  (2, 'programming', 'medium', 'Which data structure uses FIFO (First In, First Out)?', '["Stack","Queue","Tree","Graph"]', 'Queue', 200),
-  (2, 'programming', 'hard', 'What is the time complexity of quicksort in the average case?', '["O(n)","O(n log n)","O(n^2)","O(log n)"]', 'O(n log n)', 300),
-  (2, 'ai', 'easy', 'What is the goal of Natural Language Processing (NLP)?', '["Image recognition","Understanding human language","Database management","Network security"]', 'Understanding human language', 100),
-  (2, 'ai', 'medium', 'Which algorithm is commonly used for recommendation systems?', '["K-Means","Collaborative Filtering","Linear Regression","Decision Tree"]', 'Collaborative Filtering', 200),
-  (2, 'ai', 'hard', 'What is the vanishing gradient problem?', '["Gradients become too large","Gradients approach zero","Model overfits","Data becomes corrupted"]', 'Gradients approach zero', 300),
-  (2, 'cybersecurity', 'easy', 'What is phishing?', '["A type of malware","A social engineering attack via fake emails","A network protocol","A firewall rule"]', 'A social engineering attack via fake emails', 100),
-  (2, 'cybersecurity', 'medium', 'What does OWASP stand for?', '["Open Web Application Security Project","Online Web App Safety Protocol","Open Wireless Application Security Program","Operational Web Attack Surface Platform"]', 'Open Web Application Security Project', 200),
-  (2, 'cybersecurity', 'hard', 'What is a zero-day vulnerability?', '["A known patched bug","An exploit unknown to the vendor","A DDoS attack","A brute force method"]', 'An exploit unknown to the vendor', 300),
-  (2, 'logic', 'easy', 'How many bits are in a byte?', '["4","6","8","16"]', '8', 100),
-  (2, 'logic', 'medium', 'What sorting algorithm has the best worst-case time complexity?', '["Bubble Sort","Quick Sort","Merge Sort","Selection Sort"]', 'Merge Sort', 200),
-  (2, 'logic', 'hard', 'What is the maximum number of edges in a simple undirected graph with n vertices?', '["n","n-1","n(n-1)/2","n^2"]', 'n(n-1)/2', 300)
+  (2, 'programming', 'easy', 'What is the output of: print(bool("False"))', '["True","False","Error","None"]', 'True', 100),
+  (2, 'programming', 'medium', 'What is the output: x = [1,2,3]; y = x; x = [4,5,6]; print(y)', '["[4, 5, 6]","[1, 2, 3]","Error","None"]', '[1, 2, 3]', 200),
+  (2, 'programming', 'hard', 'What is the output: a = [1,2,3]; print(a is a[:])', '["True","False","Error","None"]', 'False', 300),
+  (2, 'ai', 'easy', 'Which AI system learns without labels?', '["Supervised Learning","Unsupervised Learning","Reinforcement Learning","Transfer Learning"]', 'Unsupervised Learning', 100),
+  (2, 'ai', 'medium', 'Which most commonly causes overfitting?', '["Not enough parameters","Model is too complex","Early stopping","Model is too simple"]', 'Model is too complex', 200),
+  (2, 'ai', 'hard', 'Vanishing gradient problem most commonly occurs in?', '["Decision Trees","Linear Regression","Deep Neural Networks","K-Means Clustering"]', 'Deep Neural Networks', 300),
+  (2, 'cybersecurity', 'easy', 'Which of these is NOT malware?', '["Virus","Trojan","VPN","Ransomware"]', 'VPN', 100),
+  (2, 'cybersecurity', 'medium', 'Phishing attacks mainly target?', '["Firewalls","Databases","Human vulnerabilities","Routers"]', 'Human vulnerabilities', 200),
+  (2, 'cybersecurity', 'hard', 'A zero-day attack exploits?', '["Weak passwords","Unpatched unknown vulnerabilities","Old encryption","Physical security"]', 'Unpatched unknown vulnerabilities', 300),
+  (2, 'logic', 'easy', 'Stack overflow most commonly occurs when?', '["Memory is full","Infinite recursion","Dividing by zero","Array out of bounds"]', 'Infinite recursion', 100),
+  (2, 'logic', 'medium', 'Worst-case time complexity of Quicksort?', '["O(n log n)","O(n^2)","O(n)","O(log n)"]', 'O(n^2)', 200),
+  (2, 'logic', 'hard', 'The space complexity of a recursive algorithm is generally proportional to?', '["Always O(1)","The recursion depth O(n)","The array size O(n^2)","Always O(log n)"]', 'The recursion depth O(n)', 300)
 ON CONFLICT DO NOTHING;
 
 -- SEED: Sample Questions (Round 3 - Steal/Shield)
